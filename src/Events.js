@@ -5,11 +5,9 @@
 export function createButton() {
     const button = document.createElement('button');
     button.textContent = 'Удали меня';
-
     button.addEventListener('click', () => {
         button.remove();
     });
-
     document.body.appendChild(button);
 }
 
@@ -21,16 +19,14 @@ export function createButton() {
 export function createArrList(arr) {
     const ul = document.createElement('ul');
 
-    arr.forEach((item) => {
+    for (let item of arr) {
         const li = document.createElement('li');
         li.textContent = item;
-
-        li.addEventListener('mouseenter', () => {
-            li.setAttribute('title', item);
+        li.addEventListener('mouseover', () => {
+            li.setAttribute('title', li.textContent);
         });
-
         ul.appendChild(li);
-    });
+    }
 
     document.body.appendChild(ul);
 }
@@ -48,15 +44,15 @@ export function createLink() {
     link.href = 'https://tensor.ru/';
     link.textContent = 'tensor';
 
-    let isFirstClick = true;
+    let firstClick = true;
 
     link.addEventListener('click', function (event) {
-        if (isFirstClick) {
-            event.preventDefault(); // предотвращаем переход при первом клике
+        if (firstClick) {
+            event.preventDefault(); // отменяем переход при первом клике
             link.textContent += ' ' + link.href;
-            isFirstClick = false;
+            firstClick = false;
         }
-        // во второй раз будет переход по ссылке по умолчанию
+        // при втором и последующих кликах будет обычный переход
     });
 
     document.body.appendChild(link);
@@ -79,21 +75,26 @@ export function createList() {
     const button = document.createElement('button');
     button.textContent = 'Добавить пункт';
 
-    function addLi() {
-        const li = document.createElement('li');
-        li.textContent = 'Пункт';
-
-        li.addEventListener('click', () => {
-            li.textContent += '!';
+    // Функция для добавления обработчика к li
+    function addLiClickListener(liElement) {
+        liElement.addEventListener('click', () => {
+            liElement.textContent += '!';
         });
-
-        ul.appendChild(li);
     }
 
-    // Добавляем первый элемент
-    addLi();
+    // Добавляем первый li
+    const initialLi = document.createElement('li');
+    initialLi.textContent = 'Пункт';
+    addLiClickListener(initialLi);
+    ul.appendChild(initialLi);
 
-    button.addEventListener('click', addLi);
+    // Обработчик кнопки
+    button.addEventListener('click', () => {
+        const newLi = document.createElement('li');
+        newLi.textContent = 'Пункт';
+        addLiClickListener(newLi);
+        ul.appendChild(newLi);
+    });
 
     document.body.appendChild(ul);
     document.body.appendChild(button);
